@@ -87,3 +87,59 @@ uint16_t S3_TX_getWriteAddress(void)
 	socket3_TX_WR[1]=wiznet_read(S3_TX_WR + 1);
 	return *(uint16_t*)socket3_TX_WR;
 }
+uint16_t S0_RX_getReadAddress(void)
+{
+	uint8_t socket0_RX_RD[2];
+	socket0_RX_RD[0]=wiznet_read(S0_RX_RD);
+	socket0_RX_RD[1]=wiznet_read(S0_RX_RD + 1);
+	return *(uint16_t*)socket0_RX_RD;
+}
+uint16_t S1_RX_getReadAddress(void)
+{
+	uint8_t socket1_RX_RD[2];
+	socket1_RX_RD[0]=wiznet_read(S1_RX_RD);
+	socket1_RX_RD[1]=wiznet_read(S1_RX_RD + 1);
+	return *(uint16_t*)socket1_RX_RD;
+}
+uint16_t S2_RX_getReadAddress(void)
+{
+	uint8_t socket2_RX_RD[2];
+	socket2_RX_RD[0]=wiznet_read(S2_RX_RD);
+	socket2_RX_RD[1]=wiznet_read(S2_RX_RD + 1);
+	return *(uint16_t*)socket2_RX_RD;
+}
+uint16_t S3_RX_getReadAddress(void)
+{
+	uint8_t socket3_RX_RD[2];
+	socket3_RX_RD[0]=wiznet_read(S3_RX_RD);
+	socket3_RX_RD[1]=wiznet_read(S3_RX_RD + 1);
+	return *(uint16_t*)socket3_RX_RD;
+}
+uint16_t S0_RX_getReceivedSize(void)
+{
+	uint8_t socket0_RX_RSR[2];
+	socket0_RX_RSR[0]=wiznet_read(S0_RX_RSR);
+	socket0_RX_RSR[1]=wiznet_read(S0_RX_RSR + 1);
+	return *(uint16_t*)socket0_RX_RSR;
+}
+uint16_t S1_RX_getReceivedSize(void)
+{
+	uint8_t socket1_RX_RSR[2];
+	socket1_RX_RSR[0]=wiznet_read(S1_RX_RSR);
+	socket1_RX_RSR[1]=wiznet_read(S1_RX_RSR + 1);
+	return *(uint16_t*)socket1_RX_RSR;
+}
+uint16_t S2_RX_getReceivedSize(void)
+{
+	uint8_t socket2_RX_RSR[2];
+	socket2_RX_RSR[0]=wiznet_read(S2_RX_RSR);
+	socket2_RX_RSR[1]=wiznet_read(S2_RX_RSR + 1);
+	return *(uint16_t*)socket2_RX_RSR;
+}
+uint16_t S3_RX_getReceivedSize(void)
+{
+	uint8_t socket3_RX_RSR[2];
+	socket3_RX_RSR[0]=wiznet_read(S3_RX_RSR);
+	socket3_RX_RSR[1]=wiznet_read(S3_RX_RSR + 1);
+	return *(uint16_t*)socket3_RX_RSR;
+}
