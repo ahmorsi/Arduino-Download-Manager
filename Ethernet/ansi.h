@@ -11,7 +11,7 @@
 #ifndef ANSI_H_
 #define ANSI_H_
 
-FILE uart_str = FDEV_SETUP_STREAM(uart_putch, uart_getch, _FDEV_SETUP_RW);
+static FILE uart_str = FDEV_SETUP_STREAM(uart_putch, uart_getch, _FDEV_SETUP_RW);
 /*
 	Initialize the Standard Output streams for ANSI
 */

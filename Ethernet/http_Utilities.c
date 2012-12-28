@@ -20,10 +20,11 @@ char* http_extract_host(char* URI)
 }
 char* http_extract_relativeAddress(char* URI,int startIndex)
 {
-	int relativeAddressLength = strlen(URI)-startIndex;
+	int urlLength = strlen(URI);
+	int relativeAddressLength = urlLength - startIndex;
 	char* relativeAddress = malloc(relativeAddressLength + 1);
 	int index,i=0;
-	for(index=startIndex;index<relativeAddressLength;++index,++i)
+	for(index=startIndex;index<urlLength;++index,++i)
 		relativeAddress[i]=URI[index];
 	relativeAddress[relativeAddressLength]='\0';
 	
@@ -39,7 +40,7 @@ char* http_create_request(char* method,char* relativeAddress,char* htttpVersion,
 		Content if needed 
 	*/
 	int size_method=strlen(method),size_relativeAddress = strlen(relativeAddress),size_httpV = strlen(htttpVersion),size_host=strlen(host);
-	char* request = malloc(size_method + size_relativeAddress + size_httpV + size_host + 6);
+	char* request = malloc(size_method + size_relativeAddress + size_httpV + size_host + 7);
 	
 	int cur_index=0,i=0;
 	/* Copying the Method in the Request */
@@ -77,4 +78,5 @@ char* http_create_request(char* method,char* relativeAddress,char* htttpVersion,
 	
 	request[cur_index]='\0';
 	
+	return request;
 }

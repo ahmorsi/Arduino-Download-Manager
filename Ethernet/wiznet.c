@@ -13,9 +13,9 @@ void w5100_init(void)
 {
  // Ethernet Setup
   unsigned char mac_addr[] = {0x00,0x16,0x36,0xDE,0x58,0xF6};
-  unsigned char ip_addr[] = {192,168,2,10};
+  unsigned char ip_addr[] = {192,168,1,20};
   unsigned char sub_mask[] = {255,255,255,0};
-  unsigned char gtw_addr[] = {192,168,2,1};
+  unsigned char gtw_addr[] = {192,168,1,2};
   // Setting the Wiznet W5100 Mode Register: 0x0000
   wiznet_write(MR,0x80);            // MR = 0b10000000;
   _delay_ms(1);
@@ -67,6 +67,12 @@ void w5100_init(void)
   printf("Setting Wiznet RMSR and TMSR\n\n");
   wiznet_write(RMSR,0x55);
   wiznet_write(TMSR,0x55);
+  
+  // Setting the Wiznet W5100 timeout with 2000ms
+  wiznet_write(RTR,0x9C);
+  wiznet_write(RTR + 1,0x40);
+  printf("Setting the timeout period of W5100 with %d ms\n",4000);
+  
   printf("Done Wiznet W5100 Initialized!\n");
 }
 

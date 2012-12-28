@@ -5,7 +5,7 @@
  *  Author: Ahmed Emad Morsy
  */ 
 
-
+#include "stdint.h"
 #ifndef HTTP_UTILITIES_H_
 #define HTTP_UTILITIES_H_
 

@@ -18,8 +18,8 @@
 #define gS0_RX_BASE 0x6000
 #define gS0_TX_BASE 0x4000
 
-#define gSn_RX_MASK(i)		(1<<(((wiznet_read(RMSR) << 6-(2*i))>>6)+10))-1
-#define gSn_TX_MASK(i)		(1<<(((wiznet_read(TMSR) << 6-(2*i))>>6)+10))-1
+#define gSn_RX_MASK(i)		(1<<(((wiznet_read(RMSR) << ( 6-(2*i) ))>>6)+10))-1
+#define gSn_TX_MASK(i)		(1<<(((wiznet_read(TMSR) << ( 6-(2*i) ))>>6)+10))-1
 
 #define gS1_RX_BASE			gS0_RX_BASE + gSn_RX_MASK(0) + 1
 #define gS1_TX_BASE         gS0_TX_BASE + gSn_RX_MASK(0) + 1
@@ -38,7 +38,8 @@
 #define SIPR       0x000F      // Source IP Address: 0x000F to 0x0012
 #define RMSR       0x001A      // RX Memory Size Register
 #define TMSR       0x001B      // TX Memory Size Register
-
+#define RTR		   0x0017      // Retry Time Register : Sets the period of timeout
+#define RCR        0x0019	   // Retry Count Register : Sets the number of re-transmission.
 /* Socket 0 Registers */
 #define S0_MR	   0x0400      // Socket 0: Mode Register Address
 #define S0_CR	   0x0401      // Socket 0: Command Register Address
