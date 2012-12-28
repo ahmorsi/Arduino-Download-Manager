@@ -50,7 +50,7 @@ int main(void)
 	  // keep reading the socket zero status
 	  // and handle at least socket closed and socket established
 	  
-	uint8_t sockstat=wiznet_read(S0_SR);
+	uint8_t sockstat=get_socket0_status();
 	switch(sockstat/*Handle all possible socket status here*/) 
 	{
 	case SOCK_CLOSED:

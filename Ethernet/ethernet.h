@@ -15,9 +15,6 @@
 #define FALSE 0
 uint8_t buf[MAX_BUF];
 
-/*
-	Gets the status of socket with id socket_id (0-3).
-*/
 
 uint8_t S0_initialize_socket(uint8_t eth_protocol,uint16_t tcp_port);
 uint8_t S1_initialize_socket(uint8_t eth_protocol,uint16_t tcp_port);
@@ -42,7 +39,10 @@ uint16_t S1_send(const uint8_t *buf,uint16_t buflen);
 uint16_t S2_send(const uint8_t *buf,uint16_t buflen);
 uint16_t S3_send(const uint8_t *buf,uint16_t buflen);
 
-uint16_t recv(uint8_t *buf,uint16_t buflen);
+uint16_t S0_recv(uint8_t *buf,uint16_t buflen);
+uint16_t S1_recv(uint8_t *buf,uint16_t buflen);
+uint16_t S2_recv(uint8_t *buf,uint16_t buflen);
+uint16_t S3_recv(uint8_t *buf,uint16_t buflen);
 
 uint16_t recv_size(void);
 

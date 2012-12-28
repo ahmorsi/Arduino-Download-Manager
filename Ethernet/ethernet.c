@@ -438,28 +438,225 @@ uint16_t S3_send(const uint8_t *buf,uint16_t buflen)
 	
 	wiznet_write(S3_CR,CR_SEND);
 	_delay_us(5);
+	
+	return TRUE;
 	// finally write back the new start address for the free space on the ship.
 	// and send command SEND to the ship so it starts sending the buffer on the wires
 	// and wait till it is already sent.
 }
 
-uint16_t recv(uint8_t *buf,uint16_t buflen)
+uint16_t S0_recv(uint8_t *buf,uint16_t buflen)
 {
 	// make sure the request buffer size is not bigger than the maximum buffer size.
 	// otherwise truncate it
-	
+	if(buflen >= MAX_BUF)
+		buflen = MAX_BUF - 1;
+		
 	// read the start address of the read buffer on the ship
+	uint16_t BASE = gS0_RX_BASE,RX_RD=S0_RX_getReadAddress();
+	uint16_t offset= RX_RD & gSn_RX_MASK(0);
+	uint16_t start_physical_address =  BASE + offset;
+	
+	uint16_t socket_MaxSize = gSn_RX_MASK(0) + 1;
+	
 	// make a loop to read all the bytes and store them in buf[i]
 	// write back the reading address to make the ship points to the next unread part of the buffer
 	
 	// refer back to the example on page 36 of the wiznet data sheet
+	if(offset + buflen > socket_MaxSize)
+	{
+		uint16_t upper_size = socket_MaxSize - offset;
+		uint16_t countByte;
+		for(countByte=0;countByte<upper_size;++countByte)
+		{
+			buf[countByte]=wiznet_read(start_physical_address + countByte);
+		}
+		uint8_t *leftBuffer = buf + upper_size;
+		uint16_t left_size = buflen - upper_size;
+		countByte=0;
+		for(;countByte<left_size;++countByte)
+		{
+			leftBuffer[countByte]=wiznet_read(BASE + countByte);
+		}						
+	}
+	else
+	{
+		uint16_t countByte;
+		for(countByte=0;countByte<buflen;++countByte)
+		{
+			buf[countByte]=wiznet_read(start_physical_address + countByte);
+		}			
+	}		
     
-	// add '\0' to make the end of the buffer.
+	buf[buflen]='\0'; // add '\0' to make the end of the buffer.
     
-    // finally send receive command to the ship and wait for it to process the command
-	// you can simply wait 5 us to make sure the command is executed.
+	RX_RD += buflen;
+	uint8_t* ptr_RX_RD = &RX_RD;
+	wiznet_write(S0_RX_RD,*ptr_RX_RD);
+	wiznet_write(S0_RX_RD + 1,*(ptr_RX_RD + 1));
+	
+    wiznet_write(S0_CR,CR_RECV);// finally send receive command to the ship and wait for it to process the command
+	_delay_us(5);// you can simply wait 5 us to make sure the command is executed.
 }
-
+uint16_t S1_recv(uint8_t *buf,uint16_t buflen)
+{
+	// make sure the request buffer size is not bigger than the maximum buffer size.
+	// otherwise truncate it
+	if(buflen >= MAX_BUF)
+		buflen = MAX_BUF - 1;
+		
+	// read the start address of the read buffer on the ship
+	uint16_t BASE = gS1_RX_BASE,RX_RD=S1_RX_getReadAddress();
+	uint16_t offset= RX_RD & gSn_RX_MASK(1);
+	uint16_t start_physical_address =  BASE + offset;
+	
+	uint16_t socket_MaxSize = gSn_RX_MASK(1) + 1;
+	
+	// make a loop to read all the bytes and store them in buf[i]
+	// write back the reading address to make the ship points to the next unread part of the buffer
+	
+	// refer back to the example on page 36 of the wiznet data sheet
+	if(offset + buflen > socket_MaxSize)
+	{
+		uint16_t upper_size = socket_MaxSize - offset;
+		uint16_t countByte;
+		for(countByte=0;countByte<upper_size;++countByte)
+		{
+			buf[countByte]=wiznet_read(start_physical_address + countByte);
+		}
+		uint8_t *leftBuffer = buf + upper_size;
+		uint16_t left_size = buflen - upper_size;
+		countByte=0;
+		for(;countByte<left_size;++countByte)
+		{
+			leftBuffer[countByte]=wiznet_read(BASE + countByte);
+		}						
+	}
+	else
+	{
+		uint16_t countByte;
+		for(countByte=0;countByte<buflen;++countByte)
+		{
+			buf[countByte]=wiznet_read(start_physical_address + countByte);
+		}			
+	}		
+    
+	buf[buflen]='\0'; // add '\0' to make the end of the buffer.
+    
+	RX_RD += buflen;
+	uint8_t* ptr_RX_RD = &RX_RD;
+	wiznet_write(S1_RX_RD,*ptr_RX_RD);
+	wiznet_write(S1_RX_RD + 1,*(ptr_RX_RD + 1));
+	
+    wiznet_write(S1_CR,CR_RECV);// finally send receive command to the ship and wait for it to process the command
+	_delay_us(5);// you can simply wait 5 us to make sure the command is executed.
+}
+uint16_t S2_recv(uint8_t *buf,uint16_t buflen)
+{
+	// make sure the request buffer size is not bigger than the maximum buffer size.
+	// otherwise truncate it
+	if(buflen >= MAX_BUF)
+		buflen = MAX_BUF - 1;
+		
+	// read the start address of the read buffer on the ship
+	uint16_t BASE = gS2_RX_BASE,RX_RD=S2_RX_getReadAddress();
+	uint16_t offset= RX_RD & gSn_RX_MASK(2);
+	uint16_t start_physical_address =  BASE + offset;
+	
+	uint16_t socket_MaxSize = gSn_RX_MASK(2) + 1;
+	
+	// make a loop to read all the bytes and store them in buf[i]
+	// write back the reading address to make the ship points to the next unread part of the buffer
+	
+	// refer back to the example on page 36 of the wiznet data sheet
+	if(offset + buflen > socket_MaxSize)
+	{
+		uint16_t upper_size = socket_MaxSize - offset;
+		uint16_t countByte;
+		for(countByte=0;countByte<upper_size;++countByte)
+		{
+			buf[countByte]=wiznet_read(start_physical_address + countByte);
+		}
+		uint8_t *leftBuffer = buf + upper_size;
+		uint16_t left_size = buflen - upper_size;
+		countByte=0;
+		for(;countByte<left_size;++countByte)
+		{
+			leftBuffer[countByte]=wiznet_read(BASE + countByte);
+		}						
+	}
+	else
+	{
+		uint16_t countByte;
+		for(countByte=0;countByte<buflen;++countByte)
+		{
+			buf[countByte]=wiznet_read(start_physical_address + countByte);
+		}			
+	}		
+    
+	buf[buflen]='\0'; // add '\0' to make the end of the buffer.
+    
+	RX_RD += buflen;
+	uint8_t* ptr_RX_RD = &RX_RD;
+	wiznet_write(S2_RX_RD,*ptr_RX_RD);
+	wiznet_write(S2_RX_RD + 1,*(ptr_RX_RD + 1));
+	
+    wiznet_write(S2_CR,CR_RECV);// finally send receive command to the ship and wait for it to process the command
+	_delay_us(5);// you can simply wait 5 us to make sure the command is executed.
+}
+uint16_t S3_recv(uint8_t *buf,uint16_t buflen)
+{
+	// make sure the request buffer size is not bigger than the maximum buffer size.
+	// otherwise truncate it
+	if(buflen >= MAX_BUF)
+		buflen = MAX_BUF - 1 ;
+		
+	// read the start address of the read buffer on the ship
+	uint16_t BASE = gS3_RX_BASE,RX_RD=S3_RX_getReadAddress();
+	uint16_t offset= RX_RD & gSn_RX_MASK(3);
+	uint16_t start_physical_address =  BASE + offset;
+	
+	uint16_t socket_MaxSize = gSn_RX_MASK(3) + 1;
+	
+	// make a loop to read all the bytes and store them in buf[i]
+	// write back the reading address to make the ship points to the next unread part of the buffer
+	
+	// refer back to the example on page 36 of the wiznet data sheet
+	if(offset + buflen > socket_MaxSize)
+	{
+		uint16_t upper_size = socket_MaxSize - offset;
+		uint16_t countByte;
+		for(countByte=0;countByte<upper_size;++countByte)
+		{
+			buf[countByte]=wiznet_read(start_physical_address + countByte);
+		}
+		uint8_t *leftBuffer = buf + upper_size;
+		uint16_t left_size = buflen - upper_size;
+		countByte=0;
+		for(;countByte<left_size;++countByte)
+		{
+			leftBuffer[countByte]=wiznet_read(BASE + countByte);
+		}						
+	}
+	else
+	{
+		uint16_t countByte;
+		for(countByte=0;countByte<buflen;++countByte)
+		{
+			buf[countByte]=wiznet_read(start_physical_address + countByte);
+		}			
+	}		
+    
+	buf[buflen]='\0'; // add '\0' to make the end of the buffer.
+    
+	RX_RD += buflen;
+	uint8_t* ptr_RX_RD = &RX_RD;
+	wiznet_write(S3_RX_RD,*ptr_RX_RD);
+	wiznet_write(S3_RX_RD + 1,*(ptr_RX_RD + 1));
+	
+    wiznet_write(S3_CR,CR_RECV);// finally send receive command to the ship and wait for it to process the command
+	_delay_us(5);// you can simply wait 5 us to make sure the command is executed.
+}
 uint16_t recv_size(void)
 {
 	// this method should read the socket zero buffer size in wiznet ship.
