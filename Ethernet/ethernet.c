@@ -16,7 +16,10 @@ uint8_t S0_initialize_socket(uint8_t eth_protocol,uint16_t tcp_port)
 	
 	wiznet_write(S0_MR,eth_protocol);// then it should set socket zero mode according to the passed in eth_protocol variable
 	
-	wiznet_write(S0_PORT,tcp_port);// then it should define the port number associated with this socket
+	// then it should define the port number associated with this socket
+	uint8_t* ptr_tcp_port = (uint8_t*)&tcp_port;
+	wiznet_write(S0_DPORT,*ptr_tcp_port);
+	wiznet_write(S0_DPORT + 1,*(ptr_tcp_port + 1));
 	
 	wiznet_write(S0_CR,CR_OPEN);// then it should open the socket and wait till it is opened
 	
@@ -37,7 +40,10 @@ uint8_t S1_initialize_socket(uint8_t eth_protocol,uint16_t tcp_port)
 	
 	wiznet_write(S1_MR,eth_protocol);// then it should set socket one mode according to the passed in eth_protocol variable
 	
-	wiznet_write(S1_PORT,tcp_port);// then it should define the port number associated with this socket
+	// then it should define the port number associated with this socket
+	uint8_t* ptr_tcp_port = (uint8_t*)&tcp_port;
+	wiznet_write(S1_DPORT,*ptr_tcp_port);
+	wiznet_write(S1_DPORT + 1,*(ptr_tcp_port + 1));
 	
 	wiznet_write(S1_CR,CR_OPEN);// then it should open the socket and wait till it is opened
 	
@@ -58,7 +64,10 @@ uint8_t S2_initialize_socket(uint8_t eth_protocol,uint16_t tcp_port)
 	
 	wiznet_write(S2_MR,eth_protocol);// then it should set socket two mode according to the passed in eth_protocol variable
 	
-	wiznet_write(S2_PORT,tcp_port);// then it should define the port number associated with this socket
+	// then it should define the port number associated with this socket
+	uint8_t* ptr_tcp_port = (uint8_t*)&tcp_port;
+	wiznet_write(S2_DPORT,*ptr_tcp_port);
+	wiznet_write(S2_DPORT + 1,*(ptr_tcp_port + 1));
 	
 	wiznet_write(S2_CR,CR_OPEN);// then it should open the socket and wait till it is opened
 	
@@ -79,7 +88,10 @@ uint8_t S3_initialize_socket(uint8_t eth_protocol,uint16_t tcp_port)
 	
 	wiznet_write(S3_MR,eth_protocol);// then it should set socket three mode according to the passed in eth_protocol variable
 	
-	wiznet_write(S3_PORT,tcp_port);// then it should define the port number associated with this socket
+	// then it should define the port number associated with this socket
+	uint8_t* ptr_tcp_port = (uint8_t*)&tcp_port;
+	wiznet_write(S3_DPORT,*ptr_tcp_port);
+	wiznet_write(S3_DPORT + 1,*(ptr_tcp_port + 1));
 	
 	wiznet_write(S3_CR,CR_OPEN);// then it should open the socket and wait till it is opened
 	
@@ -246,7 +258,7 @@ uint16_t S0_send(const uint8_t *buf,uint16_t buflen)
 	
 	TX_WR += buflen;
 	
-	uint8_t* ptr_TX_WR = &TX_WR;
+	uint8_t* ptr_TX_WR = (uint8_t*)&TX_WR;
 	wiznet_write(S0_TX_WR,*ptr_TX_WR);
 	wiznet_write(S0_TX_WR + 1,*(ptr_TX_WR + 1));
 	
@@ -308,7 +320,7 @@ uint16_t S1_send(const uint8_t *buf,uint16_t buflen)
 	
 	TX_WR += buflen;
 	
-	uint8_t* ptr_TX_WR = &TX_WR;
+	uint8_t* ptr_TX_WR = (uint8_t*)&TX_WR;
 	wiznet_write(S1_TX_WR,*ptr_TX_WR);
 	wiznet_write(S1_TX_WR + 1,*(ptr_TX_WR + 1));
 	
@@ -370,7 +382,7 @@ uint16_t S2_send(const uint8_t *buf,uint16_t buflen)
 	
 	TX_WR += buflen;
 	
-	uint8_t* ptr_TX_WR = &TX_WR;
+	uint8_t* ptr_TX_WR = (uint8_t*)&TX_WR;
 	wiznet_write(S2_TX_WR,*ptr_TX_WR);
 	wiznet_write(S2_TX_WR + 1,*(ptr_TX_WR + 1));
 	
@@ -432,7 +444,7 @@ uint16_t S3_send(const uint8_t *buf,uint16_t buflen)
 	
 	TX_WR += buflen;
 	
-	uint8_t* ptr_TX_WR = &TX_WR;
+	uint8_t* ptr_TX_WR = (uint8_t*)&TX_WR;
 	wiznet_write(S3_TX_WR,*ptr_TX_WR);
 	wiznet_write(S3_TX_WR + 1,*(ptr_TX_WR + 1));
 	
@@ -491,7 +503,7 @@ uint16_t S0_recv(uint8_t *buf,uint16_t buflen)
 	buf[buflen]='\0'; // add '\0' to make the end of the buffer.
     
 	RX_RD += buflen;
-	uint8_t* ptr_RX_RD = &RX_RD;
+	uint8_t* ptr_RX_RD = (uint8_t*)&RX_RD;
 	wiznet_write(S0_RX_RD,*ptr_RX_RD);
 	wiznet_write(S0_RX_RD + 1,*(ptr_RX_RD + 1));
 	
@@ -544,7 +556,7 @@ uint16_t S1_recv(uint8_t *buf,uint16_t buflen)
 	buf[buflen]='\0'; // add '\0' to make the end of the buffer.
     
 	RX_RD += buflen;
-	uint8_t* ptr_RX_RD = &RX_RD;
+	uint8_t* ptr_RX_RD = (uint8_t*)&RX_RD;
 	wiznet_write(S1_RX_RD,*ptr_RX_RD);
 	wiznet_write(S1_RX_RD + 1,*(ptr_RX_RD + 1));
 	
@@ -597,7 +609,7 @@ uint16_t S2_recv(uint8_t *buf,uint16_t buflen)
 	buf[buflen]='\0'; // add '\0' to make the end of the buffer.
     
 	RX_RD += buflen;
-	uint8_t* ptr_RX_RD = &RX_RD;
+	uint8_t* ptr_RX_RD = (uint8_t*)&RX_RD;
 	wiznet_write(S2_RX_RD,*ptr_RX_RD);
 	wiznet_write(S2_RX_RD + 1,*(ptr_RX_RD + 1));
 	
@@ -650,7 +662,7 @@ uint16_t S3_recv(uint8_t *buf,uint16_t buflen)
 	buf[buflen]='\0'; // add '\0' to make the end of the buffer.
     
 	RX_RD += buflen;
-	uint8_t* ptr_RX_RD = &RX_RD;
+	uint8_t* ptr_RX_RD = (uint8_t*)&RX_RD;
 	wiznet_write(S3_RX_RD,*ptr_RX_RD);
 	wiznet_write(S3_RX_RD + 1,*(ptr_RX_RD + 1));
 	
