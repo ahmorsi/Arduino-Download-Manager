@@ -40,7 +40,7 @@ char* http_create_request(char* method,char* relativeAddress,char* htttpVersion,
 		Content if needed 
 	*/
 	int size_method=strlen(method),size_relativeAddress = strlen(relativeAddress),size_httpV = strlen(htttpVersion),size_host=strlen(host);
-	char* request = malloc(size_method + size_relativeAddress + size_httpV + size_host + 7);
+	char* request = malloc(size_method + size_relativeAddress + size_httpV + size_host + 32);
 	
 	int cur_index=0,i=0;
 	/* Copying the Method in the Request */
@@ -72,7 +72,11 @@ char* http_create_request(char* method,char* relativeAddress,char* htttpVersion,
 	/* Copying in the Absolute URI in the Request(attribute=>Host) */
 	for(;i<size_host;++i)
 		request[cur_index++]=host[i];
-		
+	request[cur_index++]='\r';request[cur_index++]='\n';	//CRLF
+	/* Copying in the Absolute URI in the Request(attribute=>Host) */
+	request[cur_index++]='C';request[cur_index++]='o';request[cur_index++]='n';request[cur_index++]='n';request[cur_index++]='e';request[cur_index++]='c';request[cur_index++]='t';request[cur_index++]='i';request[cur_index++]='o';request[cur_index++]='n';
+	request[cur_index++]=':';request[cur_index++]=' ';
+	request[cur_index++]='k';request[cur_index++]='e';request[cur_index++]='e';request[cur_index++]='p';request[cur_index++]='-';request[cur_index++]='a';request[cur_index++]='l';request[cur_index++]='i';request[cur_index++]='v';request[cur_index++]='e';
 	request[cur_index++]='\r';request[cur_index++]='\n';	//CRLF
 	request[cur_index++]='\n';//Blank-line
 	

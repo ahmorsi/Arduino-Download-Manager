@@ -18,8 +18,7 @@
 #define gS0_RX_BASE 0x6000
 #define gS0_TX_BASE 0x4000
 
-#define gSn_RX_MASK(i)		(1<<(((wiznet_read(RMSR) << ( 6-(2*i) ))>>6)+10))-1
-#define gSn_TX_MASK(i)		(1<<(((wiznet_read(TMSR) << ( 6-(2*i) ))>>6)+10))-1
+
 
 #define gS1_RX_BASE			gS0_RX_BASE + gSn_RX_MASK(0) + 1
 #define gS1_TX_BASE         gS0_TX_BASE + gSn_RX_MASK(0) + 1
@@ -151,5 +150,6 @@ void wiznet_write(uint16_t addr,uint8_t data);
 	Read command from W5100 controller.
 */
 unsigned char wiznet_read(uint16_t addr);
-
+uint16_t gSn_RX_MASK(uint8_t socketNum);
+uint16_t gSn_TX_MASK(uint8_t socketNum);
 #endif /* WIZNET_H_ */

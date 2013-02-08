@@ -233,11 +233,16 @@ uint16_t S0_send(const uint8_t *buf,uint16_t buflen)
 	uint16_t BASE = gS0_TX_BASE,TX_WR=S0_TX_getWriteAddress();
 	uint16_t offset= TX_WR & gSn_TX_MASK(0);
 	uint16_t start_physical_address =  BASE + offset;
-	
+
+
 	uint16_t socket_MaxSize = gSn_TX_MASK(0) + 1;
+	
 	/* if overflow socket TX memory*/
 	if(offset + buflen > socket_MaxSize)
 	{
+		printf("overflow\n");
+		uart_putch('\0',&uart_str);
+		
 		uint16_t upper_size = socket_MaxSize - offset;
 		uint16_t countByte;
 		for(countByte=0;countByte<upper_size;++countByte)
@@ -269,10 +274,77 @@ uint16_t S0_send(const uint8_t *buf,uint16_t buflen)
 	
 	wiznet_write(S0_CR,CR_SEND);
 	_delay_us(5);
+	while(wiznet_read(S0_CR));
+		
+	printf("Done Sending Process\n");
+	uart_putch('\0',&uart_str);
+	
 	// finally write back the new start address for the free space on the ship.
 	// and send command SEND to the ship so it starts sending the buffer on the wires
 	// and wait till it is already sent.
 }
+
+
+//
+//uint16_t S0_send(const uint8_t *buf,uint16_t buflen)
+//{
+    //uint16_t ptr,offaddr,realaddr,txsize,timeout;   
+//
+    //if (buflen <= 0) return 0;
+//
+    //printf("Send Size: %d\n",buflen);
+//
+    //// Make sure the TX Free Size Register is available
+    //txsize=wiznet_read(S0_TX_FSR);
+    //txsize=(((txsize & 0x00FF) << 8 ) + wiznet_read(S0_TX_FSR + 1));
+//
+    //printf("TX Free Size: %d\n",txsize);
+//
+    //timeout=0;
+    //while (txsize < buflen) {
+      //_delay_ms(1);
+     //txsize=wiznet_read(S0_TX_FSR);
+     //txsize=(((txsize & 0x00FF) << 8 ) + wiznet_read(S0_TX_FSR + 1));
+     //// Timeout for approx 1000 ms
+     //if (timeout++ > 1000) {
+//
+       //printf("TX Free Size Error!\n");
+//
+       //// Disconnect the connection
+       //disconnect(0);
+       //return 0;
+     //}
+   //}	
+//
+   //// Read the Tx Write Pointer
+   //ptr = wiznet_read(S0_TX_WR);
+   //offaddr = (((ptr & 0x00FF) << 8 ) + wiznet_read(S0_TX_WR + 1));
+//
+    //printf("TX Buffer: %x\n",offaddr);	
+//
+    //while(buflen) {
+      //buflen--;
+      //// Calculate the real W5100 physical Tx Buffer Address
+      //realaddr = TXBUFADDR + (offaddr & TX_BUF_MASK);
+      //// Copy the application data to the W5100 Tx Buffer
+      //wiznet_write(realaddr,*buf);
+      //offaddr++;
+      //buf++;
+    //}
+//
+    //// Increase the S0_TX_WR value, so it point to the next transmit
+    //wiznet_write(S0_TX_WR,(offaddr & 0xFF00) >> 8 );
+    //wiznet_write(S0_TX_WR + 1,(offaddr & 0x00FF));	
+//
+    //// Now Send the SEND command
+    //wiznet_write(S0_CR,CR_SEND);
+//
+    //// Wait for Sending Process
+    //while(wiznet_read(S0_CR));	
+//
+    //return 1;
+//}
+//
 uint16_t S1_send(const uint8_t *buf,uint16_t buflen)
 {
 	// given the required data and its length
@@ -335,6 +407,8 @@ uint16_t S1_send(const uint8_t *buf,uint16_t buflen)
 	// and send command SEND to the ship so it starts sending the buffer on the wires
 	// and wait till it is already sent.
 }
+
+
 uint16_t S2_send(const uint8_t *buf,uint16_t buflen)
 {
 	// given the required data and its length

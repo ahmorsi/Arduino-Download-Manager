@@ -8,14 +8,14 @@
 #include <avr/delay.h>
 #include "wiznet.h"
 #include "spi.h"
-
+#include "ansi.h"
 void w5100_init(void)
 {
  // Ethernet Setup
-  unsigned char mac_addr[] = {0x00,0x16,0x36,0xDE,0x58,0xF6};
-  unsigned char ip_addr[] = {192,168,1,20};
-  unsigned char sub_mask[] = {255,255,255,0};
-  unsigned char gtw_addr[] = {192,168,1,2};
+  unsigned char mac_addr[] = {0x90,0xA2,0xDA,0x0D,0x2F,0xC7};
+  unsigned char ip_addr[] = {10,0,0,6};
+  unsigned char sub_mask[] = {255,0,0,0};
+  unsigned char gtw_addr[] = {10,0,0,6};
   // Setting the Wiznet W5100 Mode Register: 0x0000
   wiznet_write(MR,0x80);            // MR = 0b10000000;
   _delay_ms(1);
@@ -110,4 +110,18 @@ unsigned char wiznet_read(uint16_t addr)
   
   // Read character from SPI
   return spi_read();
+}
+uint16_t gSn_RX_MASK(uint8_t socketNum)
+{
+	uint8_t socketSizeState= wiznet_read(RMSR) << ( 6-(2*socketNum));
+	socketSizeState = (socketSizeState >> 6) + 10;
+	uint16_t socketMaxSize = 1 << socketSizeState;
+	return socketMaxSize -1;	
+}
+uint16_t gSn_TX_MASK(uint8_t socketNum)
+{
+	uint8_t socketSizeState= wiznet_read(TMSR) << ( 6-(2*socketNum));
+	socketSizeState = (socketSizeState >> 6) + 10;
+	uint16_t socketMaxSize = 1 << socketSizeState;
+	return socketMaxSize -1;
 }
